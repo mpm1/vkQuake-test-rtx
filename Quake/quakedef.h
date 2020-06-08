@@ -239,7 +239,12 @@ typedef struct
 #include "SDL.h"
 #endif
 
-#include <vulkan/vulkan_core.h>
+#ifdef _WIN64
+#define VK_ENABLE_BETA_EXTENSIONS
+#define VK_USE_PLATFORM_WIN32_KHR
+#endif // _WIN64
+
+#include <vulkan/vulkan.h>
 
 #include "console.h"
 #include "wad.h"

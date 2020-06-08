@@ -214,6 +214,9 @@ typedef struct
 	PFN_vkCmdDrawIndexed				vk_cmd_draw_indexed;
 	PFN_vkCmdPipelineBarrier			vk_cmd_pipeline_barrier;
 	PFN_vkCmdCopyBufferToImage			vk_cmd_copy_buffer_to_image;
+
+	// Raytracing
+	VkPhysicalDeviceRayTracingPropertiesKHR	vk_raytracing_properties;
 } vulkanglobals_t;
 
 extern vulkanglobals_t vulkan_globals;

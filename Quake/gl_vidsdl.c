@@ -35,6 +35,10 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include <vulkan/vulkan_win32.h>
 #endif
 
+#ifdef _WIN64
+#include "vk_raytrace.h"
+#endif
+
 #include <assert.h>
 
 #define MAX_MODE_LIST	600 //johnfitz -- was 30
@@ -745,6 +749,7 @@ static void GL_InitDevice( void )
 
 	qboolean found_swapchain_extension = false;
 	qboolean found_debug_marker_extension = false;
+	qboolean found_raytracing_extension = false;
 	vulkan_globals.dedicated_allocation = false;
 	vulkan_globals.full_screen_exclusive = false;
 	vulkan_globals.swap_chain_full_screen_acquired = false;
@@ -773,6 +778,12 @@ static void GL_InitDevice( void )
 			if ((strcmp(VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME, device_extensions[i].extensionName) == 0))
 				vulkan_globals.full_screen_exclusive = true;
 #endif
+
+#ifdef  _WIN64
+			if ((strcmp(VK_KHR_RAY_TRACING_EXTENSION_NAME, device_extensions[i].extensionName) == 0))
+				found_raytracing_extension = true;
+#endif //  _WIN64
+
 		}
 
 		free(device_extensions);
@@ -840,7 +851,7 @@ static void GL_InitDevice( void )
 	queue_create_info.queueCount = 1;
 	queue_create_info.pQueuePriorities = queue_priorities;
 
-	const char * device_extensions[5] = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+	const char * device_extensions[10] = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
 	int numEnabledExtensions = 1;
 #if _DEBUG
 	if (found_debug_marker_extension)
@@ -855,6 +866,14 @@ static void GL_InitDevice( void )
 		device_extensions[ numEnabledExtensions++ ] = VK_EXT_FULL_SCREEN_EXCLUSIVE_EXTENSION_NAME;
 	}
 #endif
+
+	if (found_raytracing_extension) {
+		device_extensions[numEnabledExtensions++] = VK_KHR_RAY_TRACING_EXTENSION_NAME;
+		device_extensions[numEnabledExtensions++] = VK_KHR_MAINTENANCE3_EXTENSION_NAME;
+		device_extensions[numEnabledExtensions++] = VK_KHR_PIPELINE_LIBRARY_EXTENSION_NAME;
+		device_extensions[numEnabledExtensions++] = VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME;
+		device_extensions[numEnabledExtensions++] = VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME;
+	}
 
 	vkGetPhysicalDeviceFeatures(vulkan_physical_device, &vulkan_physical_device_features);
 	const VkBool32 extended_format_support = vulkan_physical_device_features.shaderStorageImageExtendedFormats;
@@ -944,6 +963,10 @@ static void GL_InitDevice( void )
 	{
 		Con_Printf("Using D32 depth buffer format\n");
 		vulkan_globals.depth_format = VK_FORMAT_D32_SFLOAT;
+	}
+
+	if (found_raytracing_extension) {
+		VK_InitRayTracing(vulkan_physical_device);
 	}
 
 	vulkan_globals.vk_cmd_bind_pipeline =			(PFN_vkCmdBindPipeline)			fpGetDeviceProcAddr(vulkan_globals.device, "vkCmdBindPipeline");
@@ -1945,6 +1968,8 @@ static void GL_DestroyRenderResources( void )
 	vkDestroyRenderPass(vulkan_globals.device, vulkan_globals.main_render_pass, NULL);
 	vulkan_globals.main_render_pass = VK_NULL_HANDLE;
 }
+
+
 
 /*
 =================

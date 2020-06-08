@@ -316,6 +316,9 @@
     <ClCompile Include="..\..\Quake\snd_mp3tag.c">
       <Filter>Sound</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Quake\vk_raytrace.c">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Quake\snd_codec.h">
@@ -514,6 +517,9 @@
       <Filter>Shaders</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Quake\gl_heap.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Quake\vk_raytrace.h">
       <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
