@@ -783,7 +783,6 @@ static void GL_InitDevice( void )
 			if ((strcmp(VK_KHR_RAY_TRACING_EXTENSION_NAME, device_extensions[i].extensionName) == 0))
 				found_raytracing_extension = true;
 #endif //  _WIN64
-
 		}
 
 		free(device_extensions);
@@ -966,7 +965,7 @@ static void GL_InitDevice( void )
 	}
 
 	if (found_raytracing_extension) {
-		VK_InitRayTracing(vulkan_physical_device);
+		RayTrace_Init(vulkan_physical_device, vulkan_globals.device, vulkan_instance);
 	}
 
 	vulkan_globals.vk_cmd_bind_pipeline =			(PFN_vkCmdBindPipeline)			fpGetDeviceProcAddr(vulkan_globals.device, "vkCmdBindPipeline");

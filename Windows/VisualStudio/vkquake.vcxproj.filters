@@ -319,6 +319,9 @@
     <ClCompile Include="..\..\Quake\vk_raytrace.c">
       <Filter>Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Quake\vk_allocator.c">
+      <Filter>Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Quake\snd_codec.h">
@@ -520,6 +523,12 @@
       <Filter>Renderer</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Quake\vk_raytrace.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Quake\vk_raytracedef.h">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Quake\vk_allocator.h">
       <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
